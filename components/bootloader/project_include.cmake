@@ -16,7 +16,7 @@ if(NOT EXISTS ${secure_boot_signing_key})
         "Secure Boot Signing Key ${CONFIG_SECURE_BOOT_SIGNING_KEY} does not exist. Generate using:"
         "\tespsecure.py generate_signing_key ${CONFIG_SECURE_BOOT_SIGNING_KEY}")
 else()
-    add_custom_target(gen_secure_boot_signing_key)
+    add_custom_target(${IDF_TARGET_PREFIX}gen_secure_boot_signing_key)
 endif()
 
 if(BOOTLOADER_BUILD OR NOT IDF_BUILD_ARTIFACTS)
@@ -47,7 +47,7 @@ endif()
 if((NOT CONFIG_SECURE_BOOT_ENABLED) OR
     CONFIG_SECURE_BOOTLOADER_REFLASHABLE OR
     CONFIG_SECURE_BOOTLOADER_ONE_TIME_FLASH)
-    externalproject_add(bootloader
+    externalproject_add(${IDF_TARGET_PREFIX}bootloader
         # TODO: support overriding the bootloader in COMPONENT_PATHS
         SOURCE_DIR "${IDF_PATH}/components/bootloader/subproject"
         BINARY_DIR "${bootloader_build_dir}"
@@ -56,10 +56,10 @@ if((NOT CONFIG_SECURE_BOOT_ENABLED) OR
         INSTALL_COMMAND ""
         BUILD_ALWAYS 1  # no easy way around this...
         BUILD_BYPRODUCTS ${bootloader_binary_files}
-        DEPENDS gen_secure_boot_signing_key
+        DEPENDS ${IDF_TARGET_PREFIX}gen_secure_boot_signing_key
         )
 else()
-    fail_at_build_time(bootloader "Invalid bootloader target: bad sdkconfig?")
+    fail_at_build_time(${IDF_TARGET_PREFIX}bootloader "Invalid bootloader target: bad sdkconfig?")
 endif()
 
 # this is a hack due to an (annoying) shortcoming in cmake, it can't

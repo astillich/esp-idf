@@ -126,7 +126,7 @@ function(kconfig_process_config)
         --env "IDF_CMAKE=y")
 
     # Generate the menuconfig target (uses C-based mconf-idf tool, either prebuilt or via mconf-idf target above)
-    add_custom_target(menuconfig
+    add_custom_target(${IDF_TARGET_PREFIX}menuconfig
         ${menuconfig_depends}
         # create any missing config file, with defaults if necessary
         COMMAND ${confgen_basecommand} --env "IDF_TARGET=${IDF_TARGET}" --output config ${SDKCONFIG}
@@ -141,7 +141,7 @@ function(kconfig_process_config)
         USES_TERMINAL)
 
     # Custom target to run confserver.py from the build tool
-    add_custom_target(confserver
+    add_custom_target(${IDF_TARGET_PREFIX}confserver
         COMMAND ${CMAKE_COMMAND} -E env
         "COMPONENT_KCONFIGS=${kconfigs}"
         "COMPONENT_KCONFIGS_PROJBUILD=${kconfigs_projbuild}"

@@ -127,8 +127,8 @@ else()
         COMMENT "Generating linker script..."
         VERBATIM)
 
-    add_custom_target(esp32_linker_script DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/esp32_out.ld)
-    add_dependencies(${COMPONENT_TARGET} esp32_linker_script)
+    add_custom_target(${IDF_TARGET_PREFIX}esp32_linker_script DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/esp32_out.ld)
+    add_dependencies(${COMPONENT_TARGET} ${IDF_TARGET_PREFIX}esp32_linker_script)
 
     if(CONFIG_ESP32_PHY_INIT_DATA_IN_PARTITION AND IDF_BUILD_ARTIFACTS)
         set(PHY_INIT_DATA_BIN ${IDF_BUILD_ARTIFACTS_DIR}/${PHY_PARTITION_BIN_FILE})

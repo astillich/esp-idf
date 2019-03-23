@@ -37,7 +37,7 @@ add_custom_command(OUTPUT "${IDF_BUILD_ARTIFACTS_DIR}/partition_table/${unsigned
 
 # Add signing steps
 if(CONFIG_SECURE_BOOT_BUILD_SIGNED_BINARIES)
-    add_custom_target(gen_unsigned_partition_bin ALL DEPENDS 
+    add_custom_target(${IDF_TARGET_PREFIX}gen_unsigned_partition_bin ALL DEPENDS 
                     "${IDF_BUILD_ARTIFACTS_DIR}/partition_table/${unsigned_partition_bin}")
 
     add_custom_command(OUTPUT "${IDF_BUILD_ARTIFACTS_DIR}/partition_table/${final_partition_bin}"
@@ -49,7 +49,7 @@ if(CONFIG_SECURE_BOOT_BUILD_SIGNED_BINARIES)
 endif()
 
 if(EXISTS ${partition_csv})
-    add_custom_target(partition_table ALL DEPENDS "${IDF_BUILD_ARTIFACTS_DIR}/partition_table/${final_partition_bin}")
+    add_custom_target(${IDF_TARGET_PREFIX}partition_table ALL DEPENDS "${IDF_BUILD_ARTIFACTS_DIR}/partition_table/${final_partition_bin}")
 else()
     # If the partition input CSV is not found, create a phony partition_table target that
     # fails the build. fail_at_build_time also touches CMakeCache.txt to cause a cmake run next time
@@ -78,8 +78,8 @@ add_dependencies(bootloader check_table_contents)
 add_dependencies(app check_table_contents)
 endif()
 
-add_dependencies(bootloader partition_table)
-add_dependencies(app partition_table)
+add_dependencies(${IDF_TARGET_PREFIX}bootloader ${IDF_TARGET_PREFIX}partition_table)
+add_dependencies(${IDF_TARGET_PREFIX}app ${IDF_TARGET_PREFIX}partition_table)
 
 # Use global properties ESPTOOL_WRITE_FLASH_ARGS to pass this info to build
 # the list of esptool write arguments for flashing

@@ -175,5 +175,5 @@ endfunction()
 # Get the library target created for the given component
 function(component_get_target var component)
     get_property(prefix GLOBAL PROPERTY __IDF_COMPONENTS_PREFIX)
-    set(${var} ${prefix}_${component} PARENT_SCOPE)
+    set(${var} ${IDF_TARGET_PREFIX}${prefix}_${component} PARENT_SCOPE)
 endfunction()

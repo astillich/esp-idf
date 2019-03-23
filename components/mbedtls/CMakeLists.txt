@@ -9,11 +9,11 @@ set(ENABLE_TESTING CACHE BOOL OFF)
 set(ENABLE_PROGRAMS CACHE BOOL OFF)
 
 # Use same policy between IDF and mbedtls build
-function(project)
-    set(_args ARGV)
-    _project(${${_args}})
-    cmake_policy(SET CMP0022 NEW)
-endfunction()
+#function(project)
+#    set(_args ARGV)
+#    _project(${${_args}})
+#    cmake_policy(SET CMP0022 NEW)
+#endfunction()
 
 # Needed to for include_next includes to work from within mbedtls
 include_directories("${COMPONENT_PATH}/port/include")
@@ -69,14 +69,14 @@ endif()
 add_subdirectory(mbedtls)
 
 # Use port specific implementation of net_socket.c instead of one from mbedtls
-get_target_property(src_tls mbedtls SOURCES)
+get_target_property(src_tls ${IDF_TARGET_PREFIX}mbedtls SOURCES)
 list(REMOVE_ITEM src_tls net_sockets.c)
-set_property(TARGET mbedtls PROPERTY SOURCES ${src_tls})
+set_property(TARGET ${IDF_TARGET_PREFIX}mbedtls PROPERTY SOURCES ${src_tls})
 
-set(mbedtls_targets mbedtls mbedcrypto mbedx509)
+set(mbedtls_targets ${IDF_TARGET_PREFIX}mbedtls ${IDF_TARGET_PREFIX}mbedcrypto ${IDF_TARGET_PREFIX}mbedx509)
 
 # Add port files to mbedtls targets
-target_sources(mbedtls PRIVATE "${COMPONENT_PATH}/port/esp_bignum.c"
+target_sources(${IDF_TARGET_PREFIX}mbedtls PRIVATE "${COMPONENT_PATH}/port/esp_bignum.c"
                                 "${COMPONENT_PATH}/port/esp_hardware.c"
                                 "${COMPONENT_PATH}/port/esp_mem.c"
                                 "${COMPONENT_PATH}/port/esp_sha1.c"

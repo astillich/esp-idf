@@ -27,14 +27,14 @@ if(OTADATA_PARTITION_OFFSET AND OTADATA_PARTITION_SIZE)
         --partition-table-file ${PARTITION_CSV_PATH} generate_blank_partition_file
         --output "${IDF_BUILD_ARTIFACTS_DIR}/${BLANK_OTADATA_FILE}")
 
-    add_custom_target(blank_ota_data ALL DEPENDS "${IDF_BUILD_ARTIFACTS_DIR}/${BLANK_OTADATA_FILE}")
-    add_dependencies(flash blank_ota_data)
+    add_custom_target(${IDF_TARGET_PREFIX}blank_ota_data ALL DEPENDS "${IDF_BUILD_ARTIFACTS_DIR}/${BLANK_OTADATA_FILE}")
+    add_dependencies(${IDF_TARGET_PREFIX}flash ${IDF_TARGET_PREFIX}blank_ota_data)
 endif()
 
 set(otatool_py ${PYTHON} ${COMPONENT_PATH}/otatool.py)
 
-add_custom_target(read_otadata DEPENDS "${PARTITION_CSV_PATH}"
+add_custom_target(${IDF_TARGET_PREFIX}read_otadata DEPENDS "${PARTITION_CSV_PATH}"
                 COMMAND ${otatool_py} --partition-table-file ${PARTITION_CSV_PATH} read_otadata)
 
-add_custom_target(erase_otadata DEPENDS "${PARTITION_CSV_PATH}"
+add_custom_target(${IDF_TARGET_PREFIX}erase_otadata DEPENDS "${PARTITION_CSV_PATH}"
                 COMMAND ${otatool_py} --partition-table-file ${PARTITION_CSV_PATH} erase_otadata)

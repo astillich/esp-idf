@@ -103,9 +103,9 @@ if(NOT BOOTLOADER_BUILD AND
 endif()
 
 if(NOT BOOTLOADER_BUILD)
-    add_custom_target(app ALL DEPENDS "${IDF_BUILD_ARTIFACTS_DIR}/${IDF_PROJECT_BIN}")
+    add_custom_target(${IDF_TARGET_PREFIX}app ALL DEPENDS "${IDF_BUILD_ARTIFACTS_DIR}/${IDF_PROJECT_BIN}")
 else()
-    add_custom_target(bootloader ALL DEPENDS "${IDF_BUILD_ARTIFACTS_DIR}/${IDF_PROJECT_BIN}")
+    add_custom_target(${IDF_TARGET_PREFIX}bootloader ALL DEPENDS "${IDF_BUILD_ARTIFACTS_DIR}/${IDF_PROJECT_BIN}")
 endif()
 
 if(NOT BOOTLOADER_BUILD AND
@@ -135,6 +135,7 @@ function(esptool_py_custom_target target_name flasher_filename dependencies)
         )
 endfunction()
 
-esptool_py_custom_target(flash project "app;partition_table;bootloader")
-esptool_py_custom_target(app-flash app "app")
-esptool_py_custom_target(bootloader-flash bootloader "bootloader")
+esptool_py_custom_target(${IDF_TARGET_PREFIX}flash project "${IDF_TARGET_PREFIX}app;${IDF_TARGET_PREFIX}partition_table;${IDF_TARGET_PREFIX}bootloader")
+esptool_py_custom_target(${IDF_TARGET_PREFIX}app-flash app "${IDF_TARGET_PREFIX}app")
+esptool_py_custom_target(${IDF_TARGET_PREFIX}bootloader-flash bootloader "${IDF_TARGET_PREFIX}bootloader")
+
